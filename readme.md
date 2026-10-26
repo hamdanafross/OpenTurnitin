@@ -1,4 +1,4 @@
-# Turnitout
+# OpenTurnitout
 
 Clean papers and code before you share. Strips hidden characters, removes document
 metadata, and rewrites prose so it reads like a person wrote it — leaving equations,
@@ -6,6 +6,13 @@ citations, formatting, and code logic untouched.
 
 Runs entirely on your machine. The 12B humanizer model is downloaded once, on first
 launch, and never leaves your disk.
+
+# Turnitout
+
+> **⚠️ IMPORTANT: Before running this app, you must download the AI engine.**
+> Run `npm run setup` in your terminal to automatically fetch the correct `llama-server` files for your operating system. 
+
+*(If the setup script fails, you can manually download the `llama.cpp` release for your OS from [GitHub](https://github.com/ggml-org/llama.cpp/releases), extract it, and place `llama-server.exe` and all `.dll` files into a folder named `bin` in the project root).*
 
 ## Development
 
