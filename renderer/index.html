@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenTurnitout</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ======================================================
+     SETUP SCREEN
+     ====================================================== -->
+<div id="setup-screen" class="screen">
+  <div class="setup-inner">
+
+    <h1 class="setup-wordmark">
+      <span class="open-part">Open</span>Turnitout<span class="accent-dot">.</span>
+    </h1>
+    <p class="setup-sub">Clean papers and code before you share. Rewrites prose with a local AI — nothing leaves your machine.</p>
+
+    <div id="setup-detected" class="detected"></div>
+    <div id="setup-choices" class="choices"></div>
+
+    <div id="setup-downloading" class="hidden">
+      <p style="font-size:.875rem;font-weight:600;margin-bottom:.5rem" id="dl-label">Downloading model…</p>
+      <div class="progress-lg"><div id="dl-bar"></div></div>
+      <p class="dl-meta"><span id="dl-stats"></span></p>
+      <button class="btn btn-secondary" id="dl-cancel" style="padding:.55rem 1.2rem;font-size:.82rem">Cancel</button>
+    </div>
+
+    <div id="setup-starting" class="hidden" style="padding:.5rem 0">
+      <p><span class="spinner"></span>Loading model into memory — this can take 10–30 s…</p>
+    </div>
+
+    <div id="setup-error" class="hidden error-box">
+      <p id="setup-error-text"></p>
+      <button class="btn btn-secondary" id="setup-retry" style="padding:.55rem 1.2rem;font-size:.82rem">Try again</button>
+    </div>
+
+    <div class="setup-footer">
+      <a href="#" id="use-rules-only" class="link">Use rules-based cleaner only — skip AI</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======================================================
+     APP SCREEN
+     ====================================================== -->
+<div id="app-screen" class="screen hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-wordmark">
+      <span class="open-part">Open</span>
+      Turnitout.
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#">Input</a>
+      <a href="#">Options</a>
+      <a href="#">Output</a>
+    </nav>
+
+    <div class="sidebar-status">
+      <div class="status-pill" id="model-pill">Model ready</div>
+      <p style="font-size:.7rem;color:#444;margin-top:.6rem;line-height:1.5">All processing<br>stays on your machine.</p>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="app-content">
+
+    <!-- Input -->
+    <div class="input-block">
+      <p class="section-title">Input</p>
+      <div class="grid-2">
+        <div>
+          <div class="drop-zone" id="drop-zone">
+            <div class="drop-zone-icon">📄</div>
+            <strong>Drop a file here</strong>
+            <p>or click to browse</p>
+            <p class="hint">.txt .md .tex .docx .py .js .ts .java .cpp .c .html .css .json .yaml .xml .csv .sh .go .rs</p>
+            <input type="file" id="file-input" accept=".txt,.md,.tex,.docx,.py,.js,.ts,.java,.cpp,.c,.h,.hpp,.html,.css,.json,.yaml,.yml,.xml,.csv,.sh,.rb,.go,.rs,.php,.swift,.kt,.sql">
+          </div>
+          <div class="file-name hidden" id="file-name"></div>
+        </div>
+        <div>
+          <textarea id="paste-input" placeholder="…or paste text, LaTeX, or code here"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="options-block">
+      <p class="section-title">Options</p>
+
+      <p class="options-title">Rewrite strength</p>
+      <div class="options-row">
+        <label><input type="radio" name="strength" value="light"> Light</label>
+        <label><input type="radio" name="strength" value="medium" checked> Medium</label>
+        <label><input type="radio" name="strength" value="strong"> Strong</label>
+      </div>
+
+      <p class="options-title">Processing</p>
+      <div class="options-row">
+        <label><input type="checkbox" id="opt-hidden" checked> Hidden characters</label>
+        <label><input type="checkbox" id="opt-meta" checked> Strip metadata</label>
+        <label><input type="checkbox" id="opt-rewrite" checked> Rewrite prose</label>
+      </div>
+
+      <div class="action-row" style="margin-top:1.5rem">
+        <button class="btn btn-primary" id="process-btn">Clean &amp; Preview</button>
+        <button class="btn btn-ghost hidden" id="cancel-btn">Cancel</button>
+        <span class="status" id="status"></span>
+      </div>
+      <div class="progress hidden" id="progress"><div></div></div>
+      <p class="privacy-note">🔒 Nothing is uploaded. This runs entirely on your machine.</p>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-block hidden" id="preview-section">
+      <p class="section-title">Results</p>
+
+      <div class="preview-label-row">
+        <span class="preview-label">Original</span>
+        <span class="badge" id="original-badge"></span>
+      </div>
+      <div class="preview-box" id="original-preview"></div>
+
+      <div class="preview-divider"></div>
+
+      <div class="preview-label-row">
+        <span class="preview-label">Cleaned</span>
+        <span class="badge" id="cleaned-badge"></span>
+      </div>
+      <div class="preview-box cleaned" id="cleaned-preview"></div>
+
+      <div class="flags hidden" id="flags">
+        <h4>⚠ Check these before you send</h4>
+        <ul id="flags-list"></ul>
+      </div>
+
+      <div class="action-row" style="margin-top:1.5rem">
+        <button class="btn btn-primary" id="download-btn">Download cleaned file</button>
+        <button class="btn btn-ghost" id="reset-btn">Start over</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    OpenTurnitout &mdash; open source &mdash;
+    <a href="https://github.com/hamdanafross/OpenTurnitout" target="_blank" rel="noopener">github.com/hamdanafross/OpenTurnitout</a>
+  </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
