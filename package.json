@@ -1,0 +1,21 @@
+{
+  "name": "turnitout",
+  "version": "0.1.0",
+  "description": "Clean papers and code before you share",
+  "main": "src/main.js",
+  "author": "Turnitout",
+  "license": "MIT",
+  "scripts": {
+    "setup": "node scripts/fetch-llama-server.js",
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux"
+  },
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
